@@ -43,7 +43,9 @@
 | FR-3.4 | Task priority levels: Critical, High, Medium, Low, None |
 | FR-3.5 | Task history: all changes tracked (who, what, when) |
 | FR-3.6 | Task relations: blocks, blocked by, relates to, duplicates |
-| FR-3.7 | Subtasks: tasks can have child tasks |
+| FR-3.7 | Subtasks: tasks can have child tasks (single level only) |
+| FR-3.7.1 | Subtasks cannot have their own subtasks - converting a subtask to a task creates "relates to" relation with root task |
+| FR-3.7.2 | Deleting task with subtasks warns user; cascade delete if confirmed |
 | FR-3.8 | Task estimates: optional time estimate field |
 
 ### FR-4: Boards (Kanban)
@@ -69,7 +71,8 @@
 | FR-6.1 | Users can add comments to tasks |
 | FR-6.2 | Comments support markdown formatting |
 | FR-6.3 | Comments can mention users (@username) with notifications |
-| FR-6.4 | Comments can be edited/deleted by author within time limit |
+| FR-6.4 | Comments can be edited/deleted by author (no time limit) |
+| FR-6.5 | Comment edit history preserved (edits tracked) |
 
 ### FR-7: Time Tracking
 | ID | Requirement |
@@ -87,7 +90,7 @@
 | FR-8.2 | Tasks can be assigned to an iteration |
 | FR-8.3 | Iteration views show tasks in current iteration |
 | FR-8.4 | Iteration reports show planned vs completed |
-| FR-8.5 | Iteration workflow handled by plugin system (see FR-12) |
+| FR-8.5 | Core provides basic iterations (start/end dates, task assignment); plugin system can extend with burndown, velocity tracking |
 
 ### FR-9: Authentication & Authorization
 | ID | Requirement |
@@ -96,7 +99,6 @@
 | FR-9.2 | OAuth providers: Google, GitHub (configurable) |
 | FR-9.3 | Password reset via email |
 | FR-9.4 | Session management: view active sessions, logout |
-| FR-9.5 | Two-factor authentication (optional, future) |
 | FR-9.6 | Role-based access control per workspace |
 
 ### FR-10: Notifications
@@ -118,9 +120,16 @@
 | ID | Requirement |
 |----|-------------|
 | FR-12.1 | Plugin architecture for workflow engines (Kanban, Scrum, custom) |
-| FR-12.2 | Plugins can extend: task fields, board views, reports |
+| FR-12.2 | Plugins can extend: task fields (base fields modifiable), board views, reports |
 | FR-12.3 | Plugin configuration per workspace |
 | FR-12.4 | Core system works without any plugins installed |
+
+### FR-13: Import
+| ID | Requirement |
+|----|-------------|
+| FR-13.1 | Import tasks from CSV files |
+| FR-13.2 | Import tasks from Jira JSON export |
+| FR-13.3 | Field mapping configuration for imports |
 
 ---
 
@@ -131,7 +140,7 @@
 |----|-------------|
 | NFR-1.1 | Page load time < 2 seconds on standard connection |
 | NFR-1.2 | API response time < 200ms for 95th percentile |
-| NFR-1.3 | Support 100 concurrent users per deployment |
+| NFR-1.3 | Support 100 concurrent users per deployment (total across all workspaces) |
 | NFR-1.4 | Board drag-and-drop latency < 100ms |
 
 ### NFR-2: Scalability
@@ -191,6 +200,33 @@
 | NFR-8.1 | 99% uptime target for self-hosted scenarios |
 | NFR-8.2 | Health check endpoints for monitoring |
 | NFR-8.3 | Graceful shutdown handling |
+
+### NFR-9: Rate Limiting
+| ID | Requirement |
+|----|-------------|
+| NFR-9.1 | Configurable API rate limits (default: 100 requests/minute per user) |
+| NFR-9.2 | Rate limiting protects against abuse in self-hosted scenarios |
+
+### NFR-10: Data Retention
+| ID | Requirement |
+|----|-------------|
+| NFR-10.1 | Configurable data retention period by workspace admin |
+| NFR-10.2 | Default: keep forever, admin can configure cleanup |
+| NFR-10.3 | Applies to task history, notifications, time entries |
+
+### NFR-11: Concurrency Control
+| ID | Requirement |
+|----|-------------|
+| NFR-11.1 | Optimistic locking for concurrent task/board edits |
+| NFR-11.2 | Version field on tasks; reject update if version mismatch |
+| NFR-11.3 | User must refresh and retry on version conflict |
+
+### NFR-12: Offline Handling
+| ID | Requirement |
+|----|-------------|
+| NFR-12.1 | WebSocket disconnection shows offline banner |
+| NFR-12.2 | Disable drag-and-drop and real-time actions when offline |
+| NFR-12.3 | Re-enable actions when connection restored |
 
 ---
 
