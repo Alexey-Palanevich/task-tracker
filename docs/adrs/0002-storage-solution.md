@@ -1,6 +1,6 @@
 # ADR-0002: Storage Solution Selection
 
-Status: **Proposed**  
+Status: **Accepted**  
 Date: 2026-02-27
 
 ## Context
@@ -21,7 +21,7 @@ We need an S3-compatible storage solution that:
 
 ## Decision
 
-**To be determined** - this ADR presents alternatives for team decision.
+**SeaweedFS** - Distributed object store with S3 compatibility, chosen for its balance of simplicity, performance, and active maintenance. Single-node deployment on a VPS with S3 API available for future integrations.
 
 ## Alternatives Considered
 
@@ -82,7 +82,7 @@ We need an S3-compatible storage solution that:
 
 | Aspect | Details |
 |--------|---------|
-| **Description | Unified storage platform (block, object, file) |
+| **Description** | Unified storage platform (block, object, file) |
 | **License** | LGPL 2.1 |
 | **Performance** | 1.9 GB/s read, 1.4 GB/s write (6.3ms latency) |
 | **S3 Compatibility** | 576 passed tests - best S3 API coverage |
