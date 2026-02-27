@@ -1,0 +1,120 @@
+version: "3.8"
+
+services:
+  # Reverse Proxy with SSL
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: task-tracker-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+      - static-uploads:/app/static
+    depends_on:
+      - api
+      - web
+    restart: unless-stopped
+    networks:
+      - task-tracker
+
+  # PostgreSQL Database
+  db:
+    image: postgres:16-alpine
+    container_name: task-tracker-db
+    environment:
+      POSTGRES_USER: ${DB_USER:-tasktracker}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-changeme}
+      POSTGRES_DB: ${DB_NAME:-tasktracker}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - task-tracker
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-tasktracker}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis for WebSocket and caching
+  redis:
+    image: redis:7-alpine
+    container_name: task-tracker-redis
+    command: redis-server --appendonly yes
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    networks:
+      - task-tracker
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # SeaweedFS S3-compatible storage
+  seaweedfs:
+    image: seaweedfs/seaweedfs:3.51
+    container_name: task-tracker-seaweedfs
+    command: server -s3 -volume.dir /data -volume.max磁盘 50g -s3.port 9000
+    ports:
+      - "9000:9000"
+      - "9333:9333"
+    volumes:
+      - seaweed-data:/data
+    restart: unless-stopped
+    networks:
+      - task-tracker
+    environment:
+      - WEED_MASTER_PORT=9333
+      - WEED_VOLUME_PORT=9333
+
+  # Backend API (NestJS)
+  api:
+    build:
+      context: ..
+      dockerfile: infra/Dockerfile.backend
+    container_name: task-tracker-api
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://${DB_USER:-tasktracker}:${DB_PASSWORD:-changeme}@db:5432/${DB_NAME:-tasktracker}
+      REDIS_URL: redis://redis:6379
+      S3_ENDPOINT: http://seaweedfs:9000
+      S3_ACCESS_KEY: ${S3_ACCESS_KEY:-seaweed}
+      S3_SECRET_KEY: ${S3_SECRET_KEY:-seaweed}
+      S3_BUCKET: tasktracker
+      JWT_SECRET: ${JWT_SECRET:-changeme}
+      API_URL: ${API_URL:-https://example.com}
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - task-tracker
+
+  # Frontend (React)
+  web:
+    build:
+      context: ..
+      dockerfile: infra/Dockerfile.frontend
+    container_name: task-tracker-web
+    environment:
+      VITE_API_URL: ${API_URL:-https://example.com}/api
+      VITE_WS_URL: ${API_URL:-https://example.com}/ws
+    restart: unless-stopped
+    networks:
+      - task-tracker
+
+volumes:
+  db-data:
+  redis-data:
+  seaweed-data:
+  static-uploads:
+
+networks:
+  task-tracker:
+    driver: bridge
