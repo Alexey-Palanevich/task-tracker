@@ -131,6 +131,18 @@
 | FR-13.2 | Import tasks from Jira JSON export |
 | FR-13.3 | Field mapping configuration for imports |
 
+### FR-14: Git Integration
+| ID | Requirement |
+|----|-------------|
+| FR-14.1 | Tasks can be linked to external Git repositories (GitHub, GitLab) |
+| FR-14.2 | Users can connect tasks to specific Pull Requests/Merge Requests |
+| FR-14.3 | Users can connect tasks to specific branches |
+| FR-14.4 | Multiple PRs/MRs can be linked to a single task |
+| FR-14.5 | Manual linking: users enter branch name or PR/MR URL |
+| FR-14.6 | Task view displays all linked branches and PRs/MRs |
+| FR-14.7 | Branch name pattern suggestions: `type/TT-123-slug` based on task ID and title |
+| FR-14.8 | Quick copy: branch name, PR/MR URL from task view |
+
 ---
 
 ## Non-Functional Requirements
@@ -342,6 +354,7 @@ erDiagram
     Task }o--o{ User : assigned_to
     Task }o--|| Status : has
     Task }o--o| Iteration : optionally_in
+    Task ||--o{ GitLink : has
 
     User ||--o{ Comment : writes
     User ||--o{ TimeEntry : logs
@@ -366,6 +379,7 @@ erDiagram
 | TimeEntry | Logged work time |
 | TaskHistory | Audit trail of task changes |
 | Notification | User alerts |
+| GitLink | Git repository/branch/PR link for tasks |
 
 ### Time Entry Fields
 
@@ -378,6 +392,22 @@ erDiagram
 | date | date | When work was done |
 | description | string? | Optional note |
 | billable | boolean | For future billing features |
+
+### GitLink Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| id | UUID | Unique identifier |
+| taskId | UUID | Associated task |
+| provider | enum | Git provider: github, gitlab |
+| repository | string | Repository name (owner/repo) |
+| branchName | string? | Branch name if linking to branch |
+| prMrUrl | string? | Pull/Merge Request URL if linking to PR/MR |
+| prMrNumber | integer? | PR/MR number |
+| prMrStatus | enum? | Status: open, merged, closed, draft (for plugin integration) |
+| prMrTitle | string? | PR/MR title |
+| createdBy | UUID | User who created the link |
+| createdAt | timestamp | When link was created |
 
 ---
 
@@ -430,6 +460,9 @@ erDiagram
 | POST | /tasks/:id/comments | Add comment |
 | POST | /tasks/:id/time-entries | Log time |
 | POST | /tasks/:id/relations | Add relation |
+| GET | /tasks/:id/git-links | Get Git links for task |
+| POST | /tasks/:id/git-links | Add Git link to task |
+| DELETE | /tasks/:id/git-links/:linkId | Remove Git link |
 
 ### Board Endpoints
 | Method | Endpoint | Description |
@@ -482,6 +515,7 @@ flowchart TB
 | notification_channel | Custom notification handlers |
 | import | Import from external systems |
 | export | Custom export formats |
+| git_integration | Full OAuth + webhook integration with GitHub/GitLab |
 
 ### Plugin Interface
 
