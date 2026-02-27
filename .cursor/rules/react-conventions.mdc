@@ -1,0 +1,41 @@
+---
+description: React + Tailwind frontend conventions
+globs: apps/web/src/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# React Conventions
+
+## Components and Hooks
+
+- Place reusable UI components under `apps/web/src/components/`.
+- Place custom hooks under `apps/web/src/hooks/`.
+- Default to function components with hooks.
+- Prefix custom hooks with `use` (e.g., `useTaskFilters`, `useBoardSubscription`).
+
+## File Naming
+
+- Use **kebab-case** for files:
+  - `task-board.tsx`
+  - `workspace-switcher.tsx`
+  - `use-task-filters.ts`
+
+## Styling
+
+- Use Tailwind CSS utility classes for styling.
+- Extract repeated UI patterns into reusable components in `packages/ui/` where appropriate.
+
+## Props and Types
+
+- Name props interfaces with the component name plus `Props` suffix:
+  - `TaskBoardProps`, `WorkspaceSidebarProps`.
+- Prefer explicit prop types over `any`.
+
+## State Management
+
+- Use Zustand stores for cross-component state such as:
+  - Current workspace and project selection.
+  - Board filters (assignee, labels, priority).
+  - Real-time connection status (online/offline).
+- Keep local UI state (e.g., dialog open/closed) in component state when possible.
+

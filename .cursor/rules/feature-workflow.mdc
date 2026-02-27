@@ -1,0 +1,92 @@
+---
+description: Structured workflow for complex features that span more than one file
+alwaysApply: true
+---
+
+# Feature Development Workflow
+
+When a new feature request arrives, assess its scope. If the change touches **more than one file**, follow all six phases below in order. For single-file changes, you may implement directly, but specs and tests are still recommended.
+
+## Phase 1 — Brainstorm
+
+Goal: uncover edge cases and missing requirements before any code is written.
+
+1. Read the global requirements in `docs/plans/2026-02-27-task-tracker-requirements.md`.
+2. Read all relevant docs in `docs/specs/` and `docs/adrs/` to understand existing behavior.
+3. Ask targeted questions about:
+   - Edge cases (e.g., workspace membership, concurrent task updates).
+   - Constraints (performance, security, plugin interactions).
+   - Interactions with boards, iterations, time tracking, and git links.
+4. After clarifications, identify **new** corner cases raised by the answers and ask again if needed.
+5. Summarize agreed scope, assumptions, and out-of-scope items.
+
+Do **not** proceed until the brainstorm scope is clearly documented in a spec or the current spec is updated.
+
+## Phase 2 — Plan
+
+Goal: produce an implementation plan and an updated spec.
+
+1. Create or update a spec under `docs/specs/NNNN-feature-name/spec.md`.
+2. List every file to add or modify, with a short description of each change.
+3. Highlight dependencies between changes (e.g., “DB migration and repository change must land before API handler”).
+4. Define the test strategy:
+   - Unit tests (Vitest) for services and utilities.
+   - Integration tests for critical API endpoints.
+5. Present the plan and wait for user approval when working collaboratively.
+
+## Phase 3 — Implement (TDD)
+
+Goal: deliver the feature with tests driving the design.
+
+1. For each unit of work:
+   - Write a failing test first (Vitest).
+   - Include FR references in comments where applicable (e.g., `// FR-3.5`).
+2. Implement the minimal production code to make the test pass.
+3. Keep commits logically small; avoid batching unrelated changes.
+4. Prefer extending existing modules over adding new ones unnecessarily.
+
+TDD is **mandatory** for:
+
+- Business logic/services (e.g., task lifecycle, board operations, time tracking).
+- Utility modules (formatters, mappers, validation helpers).
+
+## Phase 4 — Check
+
+Goal: confirm the system is still healthy.
+
+1. Run the full test suite:
+   - `pnpm test`
+2. Run lint and format checks:
+   - `pnpm lint`
+3. Run the build:
+   - `pnpm build`
+4. If any step fails:
+   - Investigate root cause.
+   - Fix the issue.
+   - Re-run all checks from step 1.
+
+Do not consider work “done” if any check fails.
+
+## Phase 5 — Refactor
+
+Goal: simplify without changing behavior.
+
+1. Review new and modified code for:
+   - Duplication.
+   - Overly complex control flow.
+   - Poor naming or unclear boundaries.
+2. Apply refactorings while keeping tests green.
+3. If any code changes during refactor:
+   - Repeat Phase 4 (Check) before proceeding.
+
+## Phase 6 — Present
+
+Goal: hand off changes for manual verification.
+
+1. Summarize what was implemented, linking:
+   - Related FRs in the global requirements doc.
+   - The updated spec and any ADRs.
+2. Ask the user (or product owner) to exercise the feature manually where appropriate.
+3. Capture any follow-up changes as new tasks/spec updates.
+4. Update the spec in `docs/specs/` to reflect the final behavior and known limitations.
+

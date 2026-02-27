@@ -1,0 +1,44 @@
+---
+description: Project overview, tech stack, and core conventions
+alwaysApply: true
+---
+
+# Task Tracker - Project Overview
+
+Monorepo for the Task Tracker application: a self-hosted project management tool for small–medium teams. See the full requirements at `docs/plans/2026-02-27-task-tracker-requirements.md`.
+
+## Tech Stack
+
+- Backend: NestJS (TypeScript) monolith (REST + WebSocket + plugin engine)
+- Frontend: React + TypeScript + Tailwind CSS
+- State Management: Zustand
+- Database: PostgreSQL via Kysely
+- Testing: Vitest
+- Monorepo: Turborepo + pnpm workspaces
+- Linting/Formatting: Biome
+
+## Naming Conventions
+
+- Files and directories: **kebab-case**, no capital letters (e.g. `task-board.tsx`)
+- Route params: **snake_case** to align with DB columns (e.g. `[project_id]`)
+- DB tables and columns: **snake_case** (e.g. `workspace_members`, `created_at`)
+- TypeScript interfaces/types: PascalCase (e.g. `Workspace`, `TaskHistoryEntry`)
+- Variables and functions: camelCase
+
+## Key Directories (Planned)
+
+- `apps/api/` – NestJS monolith (REST API, WebSocket, plugin engine)
+- `apps/web/` – React frontend application
+- `apps/cli/` – Installer CLI
+- `packages/types/` – Shared TypeScript types and API contracts
+- `packages/ui/` – Shared UI components
+- `docs/plans/` – High-level product requirements
+- `docs/specs/` – Feature specifications
+- `docs/adrs/` – Architecture Decision Records
+
+## Before Implementing a Feature
+
+- Check `docs/plans/2026-02-27-task-tracker-requirements.md` for relevant FRs.
+- Check `docs/specs/` for an existing spec that covers your change.
+- If none exists, create or update a spec before touching production code.
+

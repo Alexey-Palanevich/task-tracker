@@ -1,0 +1,54 @@
+---
+description: NestJS backend conventions and patterns
+globs: apps/api/src/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# NestJS Conventions
+
+## Modules and Structure
+
+- Group related features into NestJS modules under `apps/api/src/` (e.g., `workspaces`, `projects`, `tasks`, `boards`).
+- Each module typically contains:
+  - `*.module.ts` – module definition.
+  - `*.controller.ts` – REST API controllers.
+  - `*.service.ts` – business logic.
+  - `*.gateway.ts` – WebSocket gateways (where applicable).
+  - `*.repository.ts` or data-access layer integrating with Kysely.
+
+## Controllers (REST API)
+
+- Use NestJS controllers to implement the REST endpoints defined in the requirements and API overview.
+- Keep controllers thin:
+  - Validate and parse inputs (DTOs, pipes).
+  - Delegate behavior to services.
+  - Translate domain errors into HTTP status codes.
+
+## Services (Business Logic)
+
+- Encapsulate domain rules in services (e.g., `TasksService`, `BoardsService`).
+- Services:
+  - Are responsible for enforcing invariants and permissions (in collaboration with guards).
+  - Should be thoroughly unit-tested with Vitest using TDD.
+
+## Guards, Interceptors, and Pipes
+
+- Use **guards** for authentication/authorization concerns:
+  - Workspace membership and role enforcement (Owner/Admin/Member/Guest).
+- Use **pipes** for validation and transformation of inputs.
+- Use **interceptors** for cross-cutting concerns (logging, metrics, etc.) when needed.
+
+## WebSocket Gateways
+
+- Use NestJS gateways for:
+  - Real-time board updates.
+  - In-app notifications.
+- Keep gateways thin:
+  - Authorize connections.
+  - Delegate event handling to services.
+
+## Dependency Injection
+
+- Prefer constructor injection for services, repositories, and gateways.
+- Minimize direct static usage; keep modules testable by injecting dependencies and mocking them in tests.
+

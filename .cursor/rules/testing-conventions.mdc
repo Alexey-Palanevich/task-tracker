@@ -1,0 +1,55 @@
+---
+description: Testing conventions for Task Tracker
+alwaysApply: true
+---
+
+# Testing Conventions
+
+## Framework
+
+- **Vitest** is the standard test runner for both backend and frontend TypeScript code.
+- Configuration will live at the project root (e.g. `vitest.config.mts`).
+
+## Directory Structure
+
+- Unit tests: `*.test.ts` or `*.test.tsx` located next to the source file.
+- Integration and e2e tests: live under `tests/` at the project root (sibling of `apps/` and `packages/`).
+
+## Commands (Target)
+
+These exact scripts will be wired into `package.json` when the monorepo is scaffolded:
+
+- `pnpm test` — run all tests once.
+- `pnpm test:watch` — run tests in watch mode.
+- `pnpm test:coverage` — run tests with coverage report.
+
+## Writing Tests
+
+- Import from Vitest: `describe`, `it`, `test`, `expect`, `beforeEach`, `vi`.
+- Use the same path aliases as production code (e.g., `@/` for root modules).
+- For mocks, prefer `vi.mock()` and `vi.fn()`.
+- Each test file should cover:
+  - Happy path.
+  - Edge cases.
+  - Error/failure scenarios.
+
+Where relevant, include comments referencing FR IDs from the global requirements doc:
+
+```typescript
+// FR-3.5: Task history - all changes tracked
+describe('TaskHistoryService', () => {
+  it('records who changed the task and when', async () => {
+    // ...
+  });
+});
+```
+
+## TDD and Coverage
+
+- During Phase 3 (Implement) of the Feature Workflow, write the test **before** the production code.
+- TDD is **required** for:
+  - Backend services and domain logic.
+  - Shared utilities used across multiple modules.
+- Target coverage:
+  - Critical paths (auth, task operations, board operations, time tracking): **≥ 80%**.
+

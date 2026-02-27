@@ -1,0 +1,90 @@
+---
+description: How to create and maintain feature specs and ADRs
+alwaysApply: true
+---
+
+# Spec and ADR Management
+
+## When to Create
+
+- **Spec:** Before implementing any new feature or significant change that affects behavior visible in:
+  - Global requirements (`docs/plans/2026-02-27-task-tracker-requirements.md`)
+  - API contracts
+  - Data model or plugin interfaces
+- **ADR:** When making architecturally significant decisions, such as:
+  - Choosing or changing core technologies or patterns.
+  - Introducing new integration mechanisms or security models.
+  - Adjusting plugin or event architectures.
+
+## Locations
+
+- Feature specs: `docs/specs/NNNN-feature-name/spec.md` (4-digit sequence, kebab-case name).
+- ADRs: `docs/adrs/NNNN-decision-name.md` (4-digit sequence, kebab-case name).
+- Indexes:
+  - `docs/specs/index.md` – lists all specs.
+  - `docs/adrs/index.md` – lists all ADRs.
+
+Whenever you add or change a spec/ADR, keep the corresponding index file in sync.
+
+## Spec Format (Minimum)
+
+```markdown
+# Spec NNNN: Feature Name
+
+Status: Proposed | In Progress | Completed | Deprecated
+Date: YYYY-MM-DD
+
+## Overview
+
+[What and why. Reference relevant FRs from the global requirements doc.]
+
+## Requirements
+
+- [Bullet list of requirements with FR references where applicable]
+
+## Implementation Details
+
+- [Key files changed, major flows, constraints]
+
+## API Changes
+
+- [If any API surface or payloads change, document here]
+
+## Known Limitations
+
+- [Any known gaps, trade-offs, or deferred work]
+```
+
+## ADR Format (Minimum)
+
+```markdown
+# ADR-NNNN: Title
+
+Status: Proposed | Accepted | Deprecated | Superseded
+Date: YYYY-MM-DD
+
+## Context
+
+[What problem are we solving? Why now? What constraints exist?]
+
+## Decision
+
+[What option did we choose? High-level description.]
+
+## Alternatives Considered
+
+- [Alternative 1: pros/cons and why not chosen]
+- [Alternative 2: pros/cons and why not chosen]
+
+## Consequences
+
+- Positive: [What becomes easier?]
+- Negative: [What becomes harder?]
+- Risks: [What risks are introduced?]
+```
+
+## Traceability
+
+- Reference FR IDs from `docs/plans/2026-02-27-task-tracker-requirements.md` in specs and tests.
+- In ADRs, link to related specs and vice versa.
+

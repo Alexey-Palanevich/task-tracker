@@ -1,0 +1,48 @@
+---
+description: Database conventions and migration patterns for PostgreSQL + Kysely
+globs: apps/api/src/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# Database Conventions
+
+## Naming
+
+- Tables: **snake_case** (e.g., `workspaces`, `workspace_members`, `task_history`).
+- Columns: **snake_case** (e.g., `created_at`, `workspace_id`, `updated_at`).
+- Primary keys: `id` (UUID recommended).
+- Foreign keys: `[table]_id` (e.g., `workspace_id`, `project_id`).
+- Indexes: `idx_[table]_[columns]` (e.g., `idx_tasks_project_id_status`).
+
+## Migrations
+
+- Use Kysely’s migration system for all schema changes.
+- Migrations live in a dedicated directory (e.g., `apps/api/src/db/migrations/`).
+- Migrations are **forward-only**:
+  - Do not write `DOWN` or rollback steps.
+  - Fix mistakes with new forward migrations.
+
+### Safe Patterns
+
+- Adding a NOT NULL column:
+  1. Add column as nullable.
+  2. Backfill data.
+  3. Add NOT NULL constraint in a later migration.
+- Dropping a column:
+  1. Stop using the column in code.
+  2. Deploy code without depending on the column.
+  3. Drop the column in a new migration.
+- Renaming a column:
+  1. Add a new column with the new name.
+  2. Copy data over.
+  3. Switch code to use the new column.
+  4. Drop or ignore the old column in a later migration.
+- Indexes:
+  - Use `CREATE INDEX CONCURRENTLY` to avoid long locks on large tables.
+
+## Query Patterns
+
+- Use typed Kysely query builder instead of raw SQL where possible.
+- Prefer explicit column lists over `selectAll` when performance matters.
+- Use transactions for multi-step operations that must be atomic (e.g., creating tasks plus initial history entries).
+
