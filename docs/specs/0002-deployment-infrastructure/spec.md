@@ -1,5 +1,8 @@
 # Spec 0002: Deployment Infrastructure
 
+Status: Proposed
+Date: 2026-02-27
+
 Status: In Progress
 Date: 2026-02-27
 
