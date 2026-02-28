@@ -284,6 +284,18 @@ All multi-file features should follow the 6-phase workflow encoded in `.cursor/r
 5. **Refactor** – Simplify while keeping tests green.
 6. **Present** – Summarize changes, link FRs, and update specs/ADRs as needed.
 
+### Avoiding Plan Mode Loops
+
+Plan mode can sometimes get stuck in endless refinement cycles. To prevent this:
+
+1. **Set a maximum of 3 iterations** for any single planning cycle. After 3 rounds of refinement, present the current plan and ask the user to decide whether to proceed or clarify further.
+
+2. **Recognize "good enough"** – A plan that covers the main requirements with reasonable confidence is better than a perfect plan that takes hours to finalize. Present the plan and invite feedback rather than infinite refinement.
+
+3. **Ask clarifying questions proactively** – Don't loop on assumptions. If something is unclear, ask the user directly rather than generating another iteration of the plan.
+
+4. **Escalate when stuck** – If you're cycling between options without progress, clearly state the trade-offs and ask the user to choose a direction.
+
 Branch naming (recommended, especially once git is in active use):
 
 | Prefix     | Use case             |
