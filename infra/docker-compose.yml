@@ -83,7 +83,7 @@ services:
       dockerfile: infra/Dockerfile.backend
     container_name: task-tracker-api
     environment:
-      // TOOD: make valid env variables
+      # TOOD: make valid env variables
       NODE_ENV: production
       DATABASE_URL: postgresql://${DB_USER:-tasktracker}:${DB_PASSWORD:-changeme}@db:5432/${DB_NAME:-tasktracker}
       REDIS_URL: redis://redis:6379
