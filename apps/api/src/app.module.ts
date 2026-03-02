@@ -10,6 +10,8 @@ import { CommentsModule } from './comments/comments.module';
 import { BoardsModule } from './boards/boards.module';
 import { ProjectsModule } from './projects/projects.module';
 import { TasksModule } from './tasks/tasks.module';
+import { TimeEntriesModule } from './time-entries/time-entries.module';
+import { IterationsModule } from './iterations/iterations.module';
 
 @Module({
   imports: [
@@ -25,6 +27,8 @@ import { TasksModule } from './tasks/tasks.module';
     BoardsModule,
     ProjectsModule,
     TasksModule,
+    TimeEntriesModule,
+    IterationsModule,
   ],
   controllers: [HealthController],
 })

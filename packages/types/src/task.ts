@@ -18,6 +18,7 @@ export interface Task {
   due_date: Date | null;
   estimate_minutes: number | null;
   parent_task_id: string | null;
+  iteration_id: string | null;
   version: number;
   created_at: Date;
   updated_at: Date;

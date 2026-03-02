@@ -68,7 +68,21 @@ export interface TasksTable {
   due_date: Date | null;
   estimate_minutes: number | null;
   parent_task_id: string | null;
+   iteration_id: string | null;
   version: number;
+  created_at: Date;
+  updated_at: Date;
+}
+
+export interface TimeEntriesTable {
+  id: Generated<string>;
+  task_id: string;
+  user_id: string;
+  duration_minutes: number;
+  date: Date;
+  description: string | null;
+  billable: boolean;
+  is_deleted: boolean;
   created_at: Date;
   updated_at: Date;
 }
@@ -152,6 +166,16 @@ export interface BoardColumnsTable {
   updated_at: Date;
 }
 
+export interface IterationsTable {
+  id: Generated<string>;
+  workspace_id: string;
+  name: string;
+  start_date: Date;
+  end_date: Date;
+  created_at: Date;
+  updated_at: Date;
+}
+
 export interface Database {
   users: UsersTable;
   workspaces: WorkspacesTable;
@@ -168,4 +192,6 @@ export interface Database {
   comment_edit_history: CommentEditHistoryTable;
   boards: BoardsTable;
   board_columns: BoardColumnsTable;
+  time_entries: TimeEntriesTable;
+  iterations: IterationsTable;
 }
