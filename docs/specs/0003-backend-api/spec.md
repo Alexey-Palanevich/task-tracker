@@ -1,6 +1,6 @@
 # Spec 0003: Backend API
 
-Status: Proposed
+Status: In Progress
 Date: 2026-02-28
 
 ## Overview
