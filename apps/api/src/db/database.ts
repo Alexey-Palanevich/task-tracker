@@ -106,6 +106,52 @@ export interface TaskHistoryTable {
   created_at: Date;
 }
 
+export interface LabelsTable {
+  id: Generated<string>;
+  workspace_id: string;
+  name: string;
+  color: string;
+  created_at: Date;
+  updated_at: Date;
+}
+
+export interface CommentsTable {
+  id: Generated<string>;
+  task_id: string;
+  author_user_id: string;
+  body: string;
+  created_at: Date;
+  updated_at: Date;
+  is_deleted: boolean;
+}
+
+export interface CommentEditHistoryTable {
+  id: Generated<string>;
+  comment_id: string;
+  editor_user_id: string;
+  old_body: string;
+  new_body: string;
+  edited_at: Date;
+}
+
+export interface BoardsTable {
+  id: Generated<string>;
+  project_id: string;
+  name: string;
+  created_at: Date;
+  updated_at: Date;
+}
+
+export interface BoardColumnsTable {
+  id: Generated<string>;
+  board_id: string;
+  status_id: string;
+  sort_order: number;
+  is_hidden: boolean;
+  created_at: Date;
+  updated_at: Date;
+}
+
 export interface Database {
   users: UsersTable;
   workspaces: WorkspacesTable;
@@ -117,4 +163,9 @@ export interface Database {
   task_labels: TaskLabelsTable;
   task_relations: TaskRelationsTable;
   task_history: TaskHistoryTable;
+  labels: LabelsTable;
+  comments: CommentsTable;
+  comment_edit_history: CommentEditHistoryTable;
+  boards: BoardsTable;
+  board_columns: BoardColumnsTable;
 }

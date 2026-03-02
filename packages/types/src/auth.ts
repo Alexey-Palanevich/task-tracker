@@ -2,7 +2,7 @@
  * Auth API contracts (FR-9).
  */
 
-import type { UserPublic } from './user.js';
+import type { UserPublic } from './user.ts';
 
 export interface RegisterBody {
   email: string;

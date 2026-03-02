@@ -5,6 +5,9 @@ import { HealthController } from './health/health.controller';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { WorkspacesModule } from './workspaces/workspaces.module';
+import { LabelsModule } from './labels/labels.module';
+import { CommentsModule } from './comments/comments.module';
+import { BoardsModule } from './boards/boards.module';
 import { ProjectsModule } from './projects/projects.module';
 import { TasksModule } from './tasks/tasks.module';
 
@@ -17,6 +20,9 @@ import { TasksModule } from './tasks/tasks.module';
     AuthModule,
     UsersModule,
     WorkspacesModule,
+    LabelsModule,
+    CommentsModule,
+    BoardsModule,
     ProjectsModule,
     TasksModule,
   ],

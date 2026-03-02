@@ -2,7 +2,7 @@
  * Workspace and membership types (FR-1, FR-9).
  */
 
-import type { UserPublic } from './user.js';
+import type { UserPublic } from './user.ts';
 
 export type WorkspaceRole = 'owner' | 'admin' | 'member' | 'guest';
 
