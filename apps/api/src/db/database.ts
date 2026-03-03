@@ -148,6 +148,29 @@ export interface CommentEditHistoryTable {
   edited_at: Date;
 }
 
+export interface GitLinksTable {
+  id: Generated<string>;
+  task_id: string;
+  url: string;
+  provider: string;
+  kind: string;
+  created_at: Date;
+  updated_at: Date;
+}
+
+export interface NotificationsTable {
+  id: Generated<string>;
+  user_id: string;
+  type: string;
+  /**
+   * JSON payload with contextual data.
+   */
+  data: unknown;
+  is_read: boolean;
+  read_at: Date | null;
+  created_at: Date;
+}
+
 export interface BoardsTable {
   id: Generated<string>;
   project_id: string;
@@ -194,4 +217,6 @@ export interface Database {
   board_columns: BoardColumnsTable;
   time_entries: TimeEntriesTable;
   iterations: IterationsTable;
+  git_links: GitLinksTable;
+  notifications: NotificationsTable;
 }

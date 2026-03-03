@@ -12,6 +12,9 @@ import { ProjectsModule } from './projects/projects.module';
 import { TasksModule } from './tasks/tasks.module';
 import { TimeEntriesModule } from './time-entries/time-entries.module';
 import { IterationsModule } from './iterations/iterations.module';
+import { NotificationsModule } from './notifications/notifications.module';
+import { GitLinksModule } from './git-links/git-links.module';
+import { ExportModule } from './export/export.module';
 
 @Module({
   imports: [
@@ -29,6 +32,9 @@ import { IterationsModule } from './iterations/iterations.module';
     TasksModule,
     TimeEntriesModule,
     IterationsModule,
+    NotificationsModule,
+    GitLinksModule,
+    ExportModule,
   ],
   controllers: [HealthController],
 })

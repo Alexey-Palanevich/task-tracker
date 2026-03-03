@@ -8,3 +8,6 @@ export * from './comment';
 export * from './board';
 export * from './time-entry';
 export * from './iteration';
+export * from './git-link';
+export * from './notification';
+export * from './report';
